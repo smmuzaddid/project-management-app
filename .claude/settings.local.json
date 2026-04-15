@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Read(//Users/smmuzaddid/Desktop/**)",
+      "Bash(npx create-next-app@latest pm-app --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Bash(cp -r /Users/smmuzaddid/Desktop/pm-app/. \"/Users/smmuzaddid/Desktop/project management app/\")",
+      "Bash(rm -rf /Users/smmuzaddid/Desktop/pm-app)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node node_modules/next/dist/bin/next build)",
+      "Bash(open -a \"Google Chrome\" \"https://supabase.com/dashboard\")"
+    ]
+  }
+}
