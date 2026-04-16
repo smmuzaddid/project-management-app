@@ -4,6 +4,12 @@ import Sidebar from '@/components/Sidebar'
 import MobileNav from '@/components/MobileNav'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!supabaseUrl || supabaseUrl === 'your_supabase_project_url' || !supabaseKey || supabaseKey === 'your_supabase_anon_key') {
+    redirect('/login')
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

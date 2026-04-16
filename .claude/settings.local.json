@@ -9,7 +9,10 @@
       "Bash(npm install:*)",
       "Bash(npm run:*)",
       "Bash(node node_modules/next/dist/bin/next build)",
-      "Bash(open -a \"Google Chrome\" \"https://supabase.com/dashboard\")"
+      "Bash(open -a \"Google Chrome\" \"https://supabase.com/dashboard\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s -w '\\\\n\\\\nHTTP_STATUS:%{http_code}' -X PATCH 'https://smtbkiwfdbcuhxkmzkxy.supabase.co/rest/v1/profiles?email=eq.zadid.zadu@gmail.com' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtdGJraXdmZGJjdWh4a216a3h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjQzMTcsImV4cCI6MjA5MTg0MDMxN30.j9oL-6cyOk1Px7PODSSst5TOfjPRSawrJyhchcGgi9Q' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtdGJraXdmZGJjdWh4a216a3h5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjQzMTcsImV4cCI6MjA5MTg0MDMxN30.j9oL-6cyOk1Px7PODSSst5TOfjPRSawrJyhchcGgi9Q' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{\"role\": \"admin\"}')",
+      "Bash(open -a \"Google Chrome\" \"https://supabase.com/dashboard/project/smtbkiwfdbcuhxkmzkxy/sql/new\")"
     ]
   }
 }

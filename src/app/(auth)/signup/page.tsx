@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { Loader2, UserPlus } from 'lucide-react'
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/client'
+import { Loader2, UserPlus, AlertCircle } from 'lucide-react'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -14,25 +14,33 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const supabaseReady = isSupabaseConfigured()
+
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
+    if (!supabaseReady) return
     setError('')
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
-      },
-    })
-    if (error) {
-      setError(error.message)
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName },
+          emailRedirectTo: `${location.origin}/api/auth/callback`,
+        },
+      })
+      if (error) {
+        setError(error.message)
+      } else {
+        router.push('/dashboard')
+        router.refresh()
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Sign up failed')
+    } finally {
       setLoading(false)
-    } else {
-      router.push('/dashboard')
-      router.refresh()
     }
   }
 
@@ -46,6 +54,18 @@ export default function SignupPage() {
           <h1 className="text-2xl font-bold text-white">Create Account</h1>
           <p className="text-slate-400 mt-1 text-sm">Get started with Project Manager</p>
         </div>
+
+        {!supabaseReady && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 mb-4 flex gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-amber-400 text-sm font-semibold">Supabase not configured</p>
+              <p className="text-amber-300/70 text-xs mt-1">
+                Add your credentials to <code className="bg-white/10 px-1 rounded">.env.local</code> to enable sign-up.
+              </p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSignup} className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 space-y-4">
           {error && (
@@ -61,7 +81,8 @@ export default function SignupPage() {
               value={fullName}
               onChange={e => setFullName(e.target.value)}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              disabled={!supabaseReady}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:opacity-40"
               placeholder="Your full name"
             />
           </div>
@@ -73,7 +94,8 @@ export default function SignupPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              disabled={!supabaseReady}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:opacity-40"
               placeholder="you@example.com"
             />
           </div>
@@ -86,14 +108,15 @@ export default function SignupPage() {
               onChange={e => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              disabled={!supabaseReady}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm disabled:opacity-40"
               placeholder="Min 6 characters"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !supabaseReady}
             className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-xl py-3 flex items-center justify-center gap-2 transition-colors"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
